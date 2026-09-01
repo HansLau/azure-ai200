@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>University Ticket Triage</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page-wrapper">
+    <header class="navbar">
+      <div class="nav-container">
+        <span class="brand-logo">Ticket Triage</span>
+        <a href="admin.html" class="nav-link">Admin Portal &rarr;</a>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="card">
+        <div class="card-header">
+          <h1>Submit a Support Ticket</h1>
+          <p>Please describe your issue below. Our AI assistant will help categorize your request.</p>
+        </div>
+
+        <!-- Success or fail message banner -->
+        <div id="statusMessage" class="message-banner hidden"></div>
+
+        <form id="ticketForm" novalidate>
+          
+          <!-- NAME -->
+          <div class="input-group">
+            <label for="name">Full Name <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              placeholder="John Doe" 
+              required 
+            />
+            <small class="error-text" id="nameError"></small>
+          </div>
+
+          <!-- EMAIL -->
+          <div class="input-group">
+            <label for="email">Student / Staff Email <span class="required">*</span></label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              placeholder="example@gmail.com" 
+              required 
+            />
+            <small class="error-text" id="emailError"></small>
+          </div>
+
+          <!-- TITLE -->
+          <div class="input-group">
+            <label for="title">Subject / Title <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="title" 
+              name="title" 
+              placeholder="Brief summary of your issue" 
+              required 
+            />
+            <small class="error-text" id="titleError"></small>
+          </div>
+
+          <!-- DESCRIPTION -->
+          <div class="input-group">
+            <label for="description">Detailed Description <span class="required">*</span></label>
+            <textarea 
+              id="description" 
+              name="description" 
+              rows="4" 
+              placeholder="Describe your issue in detail..." 
+              required
+            ></textarea>
+            <small class="error-text" id="descriptionError"></small>
+          </div>
+
+          <!-- PRIORITY AND CATEGORY -->
+          <div class="input-row">
+            <!-- PRIORITY -->
+            <div class="input-group">
+              <label for="priority">Priority</label>
+              <select id="priority" name="priority">
+                <option value="Low">Low</option>
+                <option value="Medium" selected>Medium</option>
+                <option value="High">High</option>
+              </select>
+            </div>
+
+            <!-- CATEGORY -->
+            <div class="input-group">
+              <div class="label-wrapper">
+                <label for="category">Category</label>
+                <button type="button" id="btnSuggestCategory" class="btn-text">
+                  Suggest with AI
+                </button>
+              </div>
+              <select id="category" name="category">
+                <option value="General Enquiry">General Enquiry</option>
+                <option value="IT Support">IT Support</option>
+                <option value="Facilities">Facilities</option>
+                <option value="Course Registration">Course Registration</option>
+                <option value="Student Finance">Student Finance</option>
+                <option value="Library Services">Library Services</option>
+              </select>
+              <small class="helper-text" id="categoryHint"></small>
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTON -->
+          <div class="form-actions">
+            <button type="submit" id="submitBtn" class="btn-primary">
+              <span class="btn-text-label">Submit Ticket</span>
+              <span class="spinner hidden" id="loadingSpinner"></span>
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
