@@ -1,23 +1,6 @@
-
-# PROGRESS SO FAR!!!
-   ONLY THE keyword_classifier.py IS WORKING!! 
-   
-   and the ai one still in progress because I don't the backend architecture we're going with so it like shot in the dark of testing. I did some local testing for AI and it working fine locally not for the project
-
-   you can see the test_keyword_classifier.py for how to use the keyword_classifier.py
-
-   you can test the code by running
-
-```bash
-   python test_keyword_classifier.py
-```
-
-BELOW is the more detailed explanation of my plan but still work in progress for integration with other part 😊👌
-
-
 # Ticket Classification Module
 
-This module suggests a **category** for a support ticket based on its title and description. It's designed to be dropped into the backend (Azure Functions) and called from the `POST /tickets` handler.
+This module suggests a **category** for a support ticket based on its title and description. It's designed to be called from the `POST /tickets` handler in the Azure Functions backend.
 
 Location in repo: `backend/classification/`
 
@@ -64,37 +47,122 @@ result = suggest_category(title, description)
 
 Recommendation: store `method` alongside the ticket in Cosmos DB. It's a nice detail to show in the admin view / demo (e.g. a small tag showing whether AI or keyword logic classified it).
 
-## Setup (for whoever integrates this)
+---
 
-1. Copy the `classification/` folder into `backend/`.
-2. Merge the contents of `classification/requirements.txt` into the main backend `requirements.txt`:
-   ```
-   azure-ai-textanalytics==5.3.0
-   python-dotenv==1.0.1
-   ```
-3. Add these environment variables (locally via `.env`, or in Azure via Function App settings / Key Vault):
-   ```
-   AZURE_LANGUAGE_ENDPOINT=<your Language resource endpoint>
-   AZURE_LANGUAGE_KEY=<your Language resource key>
-   ```
-   These should ultimately be pulled from **Azure Key Vault** in production, not hardcoded.
-4. In the ticket submission handler (`POST /tickets`), call:
-   ```python
-   from classification.classifier import suggest_category
+## Integration Guide (for whoever wires this into the Functions API)
 
-   classification_result = suggest_category(ticket.title, ticket.description)
-   ticket.category = classification_result["category"]
-   ticket.classification_method = classification_result["method"]
-   ```
+Follow these steps to plug this module into the Azure Functions backend.
 
-## Testing
+### Step 1: Copy the folder in
 
-Each file has a matching test file with the same sample tickets, so you can compare how keyword-only vs. AI-only vs. combined logic classify the same inputs:
+If the `backend/` folder doesn't have a `classification/` subfolder yet, copy this entire folder into it, so the structure looks like:
+
+```
+backend/
+├── function_app.py              ← your Functions entry point
+├── classification/
+│   ├── keyword_classifier.py
+│   ├── ai_classifier.py
+│   ├── classifier.py
+│   ├── test_keyword_classifier.py
+│   ├── test_ai_classifier.py
+│   ├── test_classifier.py
+│   ├── requirements.txt
+│   ├── .env.example
+│   └── README.md
+├── requirements.txt              ← main backend requirements
+└── local.settings.json
+```
+
+### Step 2: Merge the dependencies
+
+Open `classification/requirements.txt` and copy these two lines into the **main** `backend/requirements.txt` (don't just point to the subfolder's file — Azure Functions installs from the root one):
+
+```
+azure-ai-textanalytics==5.3.0
+python-dotenv==1.0.1
+```
+
+Then reinstall dependencies in your Functions environment:
+```bash
+pip install -r requirements.txt
+```
+
+### Step 3: Set the environment variables
+
+Locally, copy `classification/.env.example` to `classification/.env` and fill in real values (ask me for the actual key/endpoint — never share it over GitHub):
+
+```
+AZURE_LANGUAGE_ENDPOINT=your-endpoint-here
+AZURE_LANGUAGE_KEY=your-key-here
+```
+
+**Important:** `.env` only works for local testing. Once deployed to Azure, add the same two variables to the **Function App's Configuration → Application settings** in the Azure Portal (or wire them through Key Vault if that's already set up). Without this step, the AI classifier will fail in production — though it'll safely fall back to keyword matching, it just won't use AI at all until this is done.
+
+### Step 4: Call it from the ticket submission function
+
+In your `POST /tickets` handler (likely in `function_app.py` or wherever that route is defined), import and call `suggest_category`:
+
+```python
+from classification.classifier import suggest_category
+
+def create_ticket(req):
+    data = req.get_json()
+    title = data["title"]
+    description = data["description"]
+
+    classification_result = suggest_category(title, description)
+
+    ticket = {
+        "id": ...,                       # your existing ID generation
+        "name": data["name"],
+        "email": data["email"],
+        "title": title,
+        "description": description,
+        "category": classification_result["category"],
+        "classification_method": classification_result["method"],  # optional but recommended
+        "priority": data.get("priority", "Medium"),
+        "status": "New",
+        "createdDate": ...                # your existing timestamp logic
+    }
+
+    # ... save `ticket` to Cosmos DB as you already do
+```
+
+The only two fields you need from the result are `classification_result["category"]` (required — this is the actual category) and `classification_result["method"]` (optional — nice for showing which logic path was used in the admin view).
+
+### Step 5: Test the integration
+
+1. Start the Functions app locally (`func start` or however your setup runs it).
+2. Submit a test ticket through the frontend form, or with a tool like Postman/curl, using one of the example values below.
+3. Confirm the ticket saved to Cosmos DB has the correct `category` field populated.
+
+Example test payload:
+```json
+{
+  "name": "Aiman Rahman",
+  "email": "aiman@example.com",
+  "title": "Cannot access campus Wi-Fi",
+  "description": "I cannot connect to the campus Wi-Fi from my laptop."
+}
+```
+Expected result: `category: "IT Support"`.
+
+### Step 6: Confirm the fallback works in your environment too
+
+Temporarily rename or blank out the `AZURE_LANGUAGE_KEY` value and submit a ticket again — it should still succeed and return a category, just with `method: "keyword"` instead of `"ai"`. This confirms the fallback chain survives real deployment conditions, not just local testing.
+
+---
+
+## Running the standalone tests
+
+These don't require the Functions app running — they test the classification logic in isolation:
 
 ```bash
-python test_keyword_classifier.py
-python test_ai_classifier.py
-python test_classifier.py
+cd backend/classification
+python test_keyword_classifier.py   # tests keyword-only logic
+python test_ai_classifier.py        # tests AI-only logic (needs real .env values)
+python test_classifier.py           # tests combined logic + simulated AI failure
 ```
 
 ## Known limitations
@@ -105,4 +173,4 @@ python test_classifier.py
 
 ## Questions?
 
-Ping [your name] — this module owns everything under `backend/classification/`.
+
