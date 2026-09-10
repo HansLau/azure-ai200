@@ -133,6 +133,7 @@ async function suggestCategory() {
       body: JSON.stringify({
         title: titleInput.value.trim(),
         description: descInput.value.trim()
+      })
     });
 
     if (response.ok) {
