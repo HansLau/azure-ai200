@@ -64,7 +64,39 @@ def generate_next_ticket_id(container):
             return f"T{int(cnt) + 1:03d}"
         except Exception:
             return "T074"
+            
+# 0. AI Classification
+@app.route(route="classify", methods=["POST"])
+def classify_ticket(req: func.HttpRequest) -> func.HttpResponse:
+    try:
+        body = req.get_json()
 
+        title = body.get("title", "").strip()
+        description = body.get("description", "").strip()
+
+        if not title and not description:
+            return func.HttpResponse(
+                json.dumps({"error": "title or description is required"}),
+                status_code=400,
+                mimetype="application/json"
+            )
+
+        result = suggest_category(title, description)
+
+        return func.HttpResponse(
+            json.dumps(result),
+            status_code=200,
+            mimetype="application/json"
+        )
+
+    except Exception as e:
+        logging.error(f"Classification error: {e}")
+        return func.HttpResponse(
+            json.dumps({"error": str(e)}),
+            status_code=500,
+            mimetype="application/json"
+        )
+        
 # 1. Ticket Submission
 @app.route(route="tickets", methods=["POST"])
 def submit_ticket(req: func.HttpRequest) -> func.HttpResponse:
