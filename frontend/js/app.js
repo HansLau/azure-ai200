@@ -1,5 +1,5 @@
 // CONFIGURATION
-const USE_MOCK_API = true;
+const USE_MOCK_API = false;
 
 // Managed Azure Functions API Base URL
 const API_BASE_URL = window.location.origin.includes('localhost')
