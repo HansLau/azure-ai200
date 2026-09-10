@@ -130,7 +130,9 @@ async function suggestCategory() {
     const response = await fetch(`${API_BASE_URL}/classify`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: text })
+      body: JSON.stringify({
+        title: titleInput.value.trim(),
+        description: descInput.value.trim()
     });
 
     if (response.ok) {
