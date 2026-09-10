@@ -1,0 +1,457 @@
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --text-main: #0f172a;
+  --text-muted: #64748b;
+  --border-color: #e2e8f0;
+  --border-focus: #3b82f6;
+  --error: #ef4444;
+  --error-bg: #fef2f2;
+  --success: #10b981;
+  --success-bg: #ecfdf5;
+  --radius: 10px;
+  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Navbar */
+.navbar {
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+}
+
+.nav-container {
+  max-width: 720px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-logo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text-main);
+}
+
+.nav-link {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.nav-link:hover {
+  color: var(--primary);
+}
+
+/* Main Container & Card */
+.container {
+  max-width: 680px;
+  margin: 2.5rem auto;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  margin-bottom: 2rem;
+}
+
+.card-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 0.5rem;
+}
+
+.card-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Form Elements */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1.35rem;
+}
+
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 1.25rem;
+}
+
+@media (max-width: 580px) {
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+.label-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.4rem;
+  color: #334155;
+}
+
+.required {
+  color: var(--error);
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 20px;
+  border: 1px solid var(--border-color);
+  background-color: #ffffff;
+  color: var(--text-main);
+  transition: all 0.2s ease-in-out;
+  outline: none;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.15);
+}
+
+textarea {
+  resize: vertical;
+}
+
+/* Button UI */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.85rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: var(--primary);
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-text {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+  margin-bottom: 0.4rem;
+}
+
+.btn-text:hover {
+  text-decoration: underline;
+}
+
+/* Spinner */
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid #ffffff;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  animation: rotation 1s linear infinite;
+}
+
+@keyframes rotation {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Validation and Feedback States */
+.is-invalid {
+  border-color: var(--error) !important;
+  background-color: var(--error-bg);
+}
+
+.error-text {
+  color: var(--error);
+  font-size: 0.78rem;
+  margin-top: 0.35rem;
+  min-height: 1rem;
+}
+
+.helper-text {
+  color: var(--primary);
+  font-size: 0.78rem;
+  margin-top: 0.35rem;
+}
+
+.message-banner {
+  padding: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+}
+
+.message-banner.success {
+  background-color: var(--success-bg);
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.message-banner.error {
+  background-color: var(--error-bg);
+  color: #991b1b;
+  border: 1px solid #fecaca;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ADMIN DASHBOARD SPECIFIC STYLES */
+
+.nav-container.full-width {
+  max-width: 1200px;
+}
+
+.admin-container {
+  max-width: 1200px;
+}
+
+.badge {
+  font-size: 0.72rem;
+  background-color: #e0e7ff;
+  color: #3730a3;
+  padding: 0.2rem 0.5rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  vertical-align: middle;
+  margin-left: 0.35rem;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.dashboard-header h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.dashboard-header p {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+/* Secondary Button */
+.btn-secondary {
+  padding: 0.55rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-main);
+  background-color: #ffffff;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-secondary:hover {
+  background-color: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+/* Filter Card */
+.filter-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 768px) {
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-group label {
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Data Table */
+.table-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.data-table th {
+  background-color: #f8fafc;
+  padding: 0.9rem 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+}
+
+.data-table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  vertical-align: top;
+}
+
+.data-table tbody tr:hover {
+  background-color: #f8fafc;
+}
+
+/* Table Text Cell Details */
+.ticket-title {
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 0.25rem;
+}
+
+.ticket-desc {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  max-width: 320px;
+  line-height: 1.4;
+}
+
+.ticket-meta-date {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-bottom: 0.2rem;
+}
+
+.ticket-meta-email {
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+/* Status & Priority Pills */
+.pill {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pill-priority-High { background-color: #fee2e2; color: #b91c1c; }
+.pill-priority-Medium { background-color: #fef3c7; color: #b45309; }
+.pill-priority-Low { background-color: #e0f2fe; color: #0369a1; }
+
+.pill-status-New { background-color: #dbeafe; color: #1e40af; }
+.pill-status-Categorised { background-color: #f3e8ff; color: #6b21a8; }
+.pill-status-In-Progress { background-color: #ffedd5; color: #c2410c; }
+.pill-status-Resolved { background-color: #dcfce7; color: #15803d; }
+
+/* Status Update Select inside Table */
+.status-select {
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+  background-color: #fff;
+  cursor: pointer;
+}
+
+/* Loading & Empty State Containers */
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1rem;
+  color: var(--text-muted);
+}
+
+.spinner.dark {
+  border-color: var(--text-muted);
+  border-bottom-color: transparent;
+  margin-bottom: 0.75rem;
+}

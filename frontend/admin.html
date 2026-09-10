@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>University Ticket Triage</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="page-wrapper">
+    <!-- Navbar -->
+    <header class="navbar">
+      <div class="nav-container full-width">
+        <span class="brand-logo">Ticket Triage <span class="badge">Admin</span></span>
+        <div class="nav-actions">
+          <a href="index.html" class="nav-link">&larr; Student Form</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Dashboard Container -->
+    <main class="container admin-container">
+      
+      <!-- Top Overview & Refresh -->
+      <div class="dashboard-header">
+        <div>
+          <h1>Helpdesk Queue</h1>
+          <p>Review, filter, and triage support requests submitted across campus.</p>
+        </div>
+        <button id="btnRefresh" class="btn-secondary">🔄 Refresh</button>
+      </div>
+
+      <!-- Live Notification Banner -->
+      <div id="adminMessage" class="message-banner hidden"></div>
+
+      <!-- Filter and Search Toolbar -->
+      <section class="filter-card">
+        <div class="filter-grid">
+          
+          <!-- SEARCH BY EMAIL / TITLE -->
+          <div class="filter-group">
+            <label for="searchQuery">Search</label>
+            <input 
+              type="text" 
+              id="searchQuery" 
+              placeholder="Search by email, title, or keyword..." 
+            />
+          </div>
+
+          <!-- FILTER BY STATUS -->
+          <div class="filter-group">
+            <label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="ALL">All</option>
+              <option value="New">New</option>
+              <option value="Categorised">Categorised</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Resolved">Resolved</option>
+            </select>
+          </div>
+
+          <!-- FILTER BY CATEGORY -->
+          <div class="filter-group">
+            <label for="categoryFilter">Category</label>
+            <select id="categoryFilter">
+              <option value="ALL">All</option>
+              <option value="IT Support">IT Support</option>
+              <option value="Facilities">Facilities</option>
+              <option value="Course Registration">Course Registration</option>
+              <option value="Student Finance">Student Finance</option>
+              <option value="Library Services">Library Services</option>
+              <option value="General Enquiry">General Enquiry</option>
+            </select>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Tickets Data Table -->
+      <div class="table-card">
+        <div class="table-responsive">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Date & Email</th>
+                <th>Subject & Description</th>
+                <th>Category</th>
+                <th>Priority</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="ticketTableBody">
+              <!-- Dynamically populated via admin.js -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Empty / Loading State Containers -->
+        <div id="loadingState" class="state-container hidden">
+          <div class="spinner dark"></div>
+          <p>Fetching tickets from database...</p>
+        </div>
+
+        <div id="emptyState" class="state-container hidden">
+          <p>No tickets found matching your filter criteria.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
