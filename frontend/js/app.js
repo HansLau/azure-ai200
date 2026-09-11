@@ -4,7 +4,7 @@ const USE_MOCK_API = false;
 // Managed Azure Functions API Base URL
 const API_BASE_URL = window.location.origin.includes('localhost')
   ? 'http://localhost:7071/api'
-  : '/api';
+  : 'https://fn-tickettriage-11669.azurewebsites.net/api';
 
 // DOM ELEMENTS
 const ticketForm = document.getElementById('ticketForm');
